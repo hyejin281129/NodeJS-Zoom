@@ -10,7 +10,7 @@ app.set("views", __dirname + "/views");
 // public
 app.use("/public", express.static(__dirname + "/public"));
 
-// 라우터
+// route
 app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 
@@ -20,6 +20,12 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 // ws 서버만 만들어도 WebSocket은 작동 함
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+
+// JS만 이용해서 채팅을 만들기 위한 작업
+function handleConnection(socket) {
+  console.log(socket);
+}
+wss.on("connection", handleConnection);
 
 server.listen(3000, handleListen);
 
