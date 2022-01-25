@@ -21,11 +21,22 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// JS만 이용해서 채팅을 만들기 위한 작업
-function handleConnection(socket) {
-  console.log(socket);
+function onSocketClose() {
+  console.log("Disconneted from the Browser")
 }
-wss.on("connection", handleConnection);
+
+function onSocketMessage(message){
+  console.log(message.toString("utf-8"));
+}
+
+// JS만 이용해서 채팅을 만들기 위한 작업
+wss.on("connection", (socket) => {
+  // 메세지 전송 
+  console.log("Connected to Browser");
+  socket.on("close", onSocketClose);
+  socket.on("message", onSocketMessage);
+  socket.send("hello!");
+});
 
 server.listen(3000, handleListen);
 
